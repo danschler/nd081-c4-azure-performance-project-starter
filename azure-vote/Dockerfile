@@ -1,6 +1,6 @@
-# Pull the base image - Updated to Python 3.12
+# Pull the base image
 FROM tiangolo/uwsgi-nginx-flask:python3.12
-# Install dependencies with specific versions for Python 3.12 compatibility
+# Install depndencies 
 RUN pip install --no-cache-dir redis==5.0.1
 RUN pip install --no-cache-dir opencensus==0.11.4
 RUN pip install --no-cache-dir opencensus-ext-azure==1.1.13

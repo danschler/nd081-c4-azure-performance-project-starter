@@ -20,6 +20,7 @@ from opencensus.tags import tag_map as tag_map_module
 from opencensus.ext.azure.trace_exporter import AzureExporter
 from opencensus.trace.samplers import ProbabilitySampler
 from opencensus.trace.tracer import Tracer
+from opencensus.trace import execution_context
 from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 from opencensus.trace import config_integration
 
@@ -92,17 +93,18 @@ if not r.get(button2): r.set(button2,0)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    request_tracer = execution_context.get_opencensus_tracer()
 
     if request.method == 'GET':
 
         # Get current values
         vote1 = r.get(button1).decode('utf-8')
         # TODO: use tracer object to trace cat vote
-        with tracer.span(name="Cats Vote") as span:
+        with request_tracer.span(name="Cats Vote") as span:
             logger.info("Cats Vote")
         vote2 = r.get(button2).decode('utf-8')
         # TODO: use tracer object to trace dog vote
-        with tracer.span(name="Dogs Vote") as span:
+        with request_tracer.span(name="Dogs Vote") as span:
             logger.info("Dogs Vote")
 
         # Return index with values

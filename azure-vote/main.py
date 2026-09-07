@@ -23,37 +23,33 @@ from opencensus.trace.tracer import Tracer
 from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 
 
-# TODO: GUID gegen die ID aus Azure ersetzen
 # Logging
 logger = logging.getLogger(__name__)
-handler=AzureLogHandler(connection_string='InstrumentationKey={guid}')
+handler=AzureLogHandler(connection_string='InstrumentationKey=InstrumentationKey=d5c3da7a-a7cf-490a-ab2a-0d05579e359e;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=4cc6c41a-9d72-49ed-909f-5fb6a90a8e0a')
 handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
 logger.addHandler(handler)
-logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey={guid}'))
+logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=InstrumentationKey=d5c3da7a-a7cf-490a-ab2a-0d05579e359e;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=4cc6c41a-9d72-49ed-909f-5fb6a90a8e0a'))
 logger.setLevel(logging.INFO)
 # TODO: Setup logger
 
-#TODO: GUID gegen die ID aus Azure ersetzen
 # Metrics
 exporter = metrics_exporter.new_metrics_exporter(
     enable_standard_metrics=True,
-    connection_string='InstrumentationKey={guid}')# TODO: Setup exporter
+    connection_string='InstrumentationKey=InstrumentationKey=d5c3da7a-a7cf-490a-ab2a-0d05579e359e;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=4cc6c41a-9d72-49ed-909f-5fb6a90a8e0a')# TODO: Setup exporter
 
-#TODO: GUID gegen die ID aus Azure ersetzen
 # Tracing
 tracer = Tracer(
     exporter=AzureExporter(
-        connection_string='InstrumentationKey={guid}'),
+        connection_string='InstrumentationKey=InstrumentationKey=d5c3da7a-a7cf-490a-ab2a-0d05579e359e;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=4cc6c41a-9d72-49ed-909f-5fb6a90a8e0a'),
     sampler=ProbabilitySampler(1.0),
 )# TODO: Setup tracer
 
 app = Flask(__name__)
 
-#TODO: GUID gegen die ID aus Azure ersetzen
 # Requests
 middleware = FlaskMiddleware(
     app,
-    exporter=AzureExporter(connection_string='InstrumentationKey={guid}'),
+    exporter=AzureExporter(connection_string='InstrumentationKey=InstrumentationKey=d5c3da7a-a7cf-490a-ab2a-0d05579e359e;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=4cc6c41a-9d72-49ed-909f-5fb6a90a8e0a'),
     sampler=ProbabilitySampler(1.0),
 )# TODO: Setup flask middleware
 

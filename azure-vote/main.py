@@ -21,7 +21,15 @@ from opencensus.ext.azure.trace_exporter import AzureExporter
 from opencensus.trace.samplers import ProbabilitySampler
 from opencensus.trace.tracer import Tracer
 from opencensus.ext.flask.flask_middleware import FlaskMiddleware
+from opencensus.trace import config_integration
 
+
+# For metrics
+stats = stats_module.stats
+view_manager = stats.view_manager
+
+config_integration.trace_integrations(['logging'])
+config_integration.trace_integrations(['requests'])
 
 # Logging
 logger = logging.getLogger(__name__)
@@ -36,6 +44,7 @@ logger.setLevel(logging.INFO)
 exporter = metrics_exporter.new_metrics_exporter(
     enable_standard_metrics=True,
     connection_string='InstrumentationKey=d5c3da7a-a7cf-490a-ab2a-0d05579e359e;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/;ApplicationId=4cc6c41a-9d72-49ed-909f-5fb6a90a8e0a')# TODO: Setup exporter
+view_manager.register_exporter(exporter)
 
 # Tracing
 tracer = Tracer(
@@ -90,10 +99,12 @@ def index():
         # Get current values
         vote1 = r.get(button1).decode('utf-8')
         # TODO: use tracer object to trace cat vote
-        tracer.span(name="Cat voted")
+        with tracer.span(name="Cats Vote") as span:
+            print("Cats Vote")
         vote2 = r.get(button2).decode('utf-8')
         # TODO: use tracer object to trace dog vote
-        tracer.span(name="Dog voted")
+        with tracer.span(name="Dogs Vote") as span:
+            print("Dogs Vote")
 
         # Return index with values
         return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
